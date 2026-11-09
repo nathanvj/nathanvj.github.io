@@ -9,7 +9,7 @@ import type { Ability, AskQuestion, Link, Rich, WorkEntry } from './types';
 // ------------------------------------------------------------------ hero
 export const hero = {
   title: "Hi, I'm Nathan.",
-  lede: "I build products from the database to the last pixel, and these days most of them run on AI. Right now that's [Advey](https://advey.ai), where I'm CTO: we turn financial advisors' client meetings into compliance-ready reports." as Rich,
+  lede: "I build products from the database to the last pixel, and these days most of them run on AI. Right now I'm CTO at [Advey](https://advey.ai), where we build software for financial advisors." as Rich,
   actions: [
     { label: 'Email me', href: 'mailto:hi@nathanvj.com' },
     { label: 'See my work', href: '#work' },
@@ -57,7 +57,7 @@ export const work = {
       location: 'The Netherlands',
       current: true,
       description:
-        'An AI platform that records and transcribes client meetings for financial advisors, then turns them into structured, compliance-ready reports. "You became an advisor, not a note-taker."',
+        'An AI platform that records and transcribes client meetings for financial advisors, then turns them into structured reports. "You became an advisor, not a note-taker."',
       highlights: [
         'Technical vision, architecture and product engineering, from idea to production',
         'The AI pipeline, from recorded meeting to finished report',
@@ -153,7 +153,7 @@ export const build = {
         id: 'advey',
         question: 'What are you building at Advey?',
         answer:
-          'Advey records and transcribes client meetings for financial advisors, then turns them into structured, compliance-ready reports. As CTO I own the architecture and the AI pipeline, from speech to the final report.',
+          'Advey records and transcribes client meetings for financial advisors, then turns them into structured reports. As CTO I own the architecture and the AI pipeline, from speech to the final report.',
       },
       {
         id: 'reliable',
