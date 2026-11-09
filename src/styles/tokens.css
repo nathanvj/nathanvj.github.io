@@ -1,0 +1,104 @@
+/*
+  Design tokens: the only place colours, fonts, the pixel size and layering are defined.
+
+  A colourful pixel polder: warm ink on a sky-tinted page, white tiles,
+  a sunny yellow for the little details, and Dutch orange that always means
+  "do this". The painted world has its own palette in scripts/scene/env.ts.
+*/
+
+:root {
+  /* one pixel of the pixel grid: borders, shadows and sprites all use it */
+  --px: 3px;
+
+  /* colours that stay the same day and night */
+  --orange: #ff7a1a;      /* the accent: things you can do */
+  --orange-hover: #ff8f3d;
+  --orange-deep: #c94e06;
+  --on-orange: #24203b;
+  --heart: #ff4f6d;
+
+  /* the terminal is always night */
+  --term-bg: #14183a;
+  --term-text: #e8e6ff;
+  --term-dim: #9c98c4;
+  --term-hl: #ffb070;
+  --term-ok: #9ff0b8;
+  --term-link: #8cc4ff;
+  --term-prompt: #ff9a4a;
+
+  /* type */
+  --font-display: 'Pixelify Sans Variable', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-term: 'VT323', ui-monospace, Menlo, monospace;
+
+  /*
+    Layers, bottom to top. Everything that overlaps uses one of these.
+      content     the page itself
+      bones       hidden bones sit just above their surroundings
+      item        the ball and treats
+      ruby        Ruby herself: over the page, under anything that opens on top of it
+      water       the boat and the duck, in the ditch in front of the path she walks on
+      bubble      speech bubbles
+      terminal    the draggable terminal window
+      panel       Ruby's panel, bottom left
+      toast       messages at the bottom
+      confetti    party mode, on top of everything
+  */
+  --z-content: 1;
+  --z-header: 2;
+  --z-bones: 6;
+  --z-item: 20;
+  --z-ruby: 21;
+  --z-water: 22;
+  --z-bubble: 23;
+  --z-terminal: 50;
+  --z-panel: 55;
+  --z-toast: 70;
+  --z-confetti: 80;
+}
+
+/*
+  Colours that change between day and night. The page follows the theme on
+  <html>; anything marked data-sky follows its own sky instead (the header and
+  the hero, while Ruby Run turns day into night).
+*/
+:root,
+[data-sky='day'] {
+  --glaze: #eef7fc;       /* page background */
+  --tile: #ffffff;        /* cards */
+  --mist: #e2eff7;        /* quiet fills */
+  --sky: #f6c453;         /* the little details: dashes, dots, ornaments */
+  --cobalt: #1f74c8;      /* links */
+  --deep: #174f8a;
+  --text: #24203b;
+  --text-soft: #5d5a78;
+  --edge: #24203b;        /* every pixel border */
+  --ground: #24203b;      /* the footer ground */
+  --on-ground: #f2e6cf;
+  --headline-shadow: #ff8a75;
+  color-scheme: light;
+}
+
+:root[data-theme='night'],
+[data-sky='night'] {
+  --glaze: #151935;
+  --tile: #20244a;
+  --mist: #2b3060;
+  --sky: #a8792a;
+  --cobalt: #8cc4ff;
+  --deep: #d0e6ff;
+  --text: #f4f1ff;
+  --text-soft: #bdb8dc;
+  --edge: #06061a;
+  --ground: #06061a;
+  --on-ground: #bdb8dc;
+  --headline-shadow: #b8405f;
+  color-scheme: dark;
+}
+
+/* colour is inherited as a value, so a part with its own sky sets it again */
+[data-sky] { color: var(--text); }
+
+@media (max-width: 640px) {
+  :root { --px: 2px; }
+}

@@ -1,0 +1,72 @@
+---
+/** What I build: AI first, with an "Ask me something" box; then two smaller cards. */
+import { build } from '../../content/home';
+import { rich } from '../../lib/rich';
+import PixelIcon from '../ui/PixelIcon.astro';
+---
+<section class="section" id="build" aria-labelledby="build-title">
+  <div class="wrap">
+    <h2 id="build-title"><span data-platform>{build.title}</span></h2>
+    <p class="intro">{build.intro}</p>
+
+    <div class="grid">
+      <article class="tile ability featured" data-platform data-say={build.rubySays}>
+        <div>
+          <div class="head"><PixelIcon name={build.featured.icon} class="icon" /><h3>{build.featured.title}</h3></div>
+          <p set:html={rich(build.featured.text)} />
+        </div>
+        <div class="ask" aria-labelledby="ask-title">
+          <p class="ask-title" id="ask-title">{build.ask.title}</p>
+          <div class="chips">
+            {build.ask.questions.map((q) => <button type="button" class="chip" data-ask={q.id} aria-pressed="false">{q.question}</button>)}
+          </div>
+          <div class="answer" data-ask-out aria-live="polite"><span class="placeholder">{build.ask.placeholder}</span></div>
+        </div>
+      </article>
+
+      {build.abilities.map((a) => (
+        <article class="tile ability" data-platform>
+          <div class="head"><PixelIcon name={a.icon} class="icon" /><h3>{a.title}</h3></div>
+          <p set:html={rich(a.text)} />
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 28px; }
+  .featured { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px; padding: 28px; }
+  @media (max-width: 860px) {
+    .grid, .featured { grid-template-columns: minmax(0, 1fr); }
+  }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .head h3 { font-size: 24px; line-height: 1.15; }
+  .featured .head h3 { font-size: clamp(26px, 3vw, 32px); }
+  .head :global(.icon) { flex: none; width: calc(var(--px) * 12); height: calc(var(--px) * 12); color: var(--text); }
+  .ability p { color: var(--text-soft); max-width: 60ch; margin: 0; }
+  .featured p { font-size: 19px; }
+
+  .ask {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 18px 16px;
+    background: var(--glaze);
+    box-shadow: inset 0 0 0 var(--px) var(--mist);
+  }
+  .ask-title { margin: 0; font: 600 17px/1 var(--font-display); }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .answer { min-height: 7.6em; font-size: 16px; line-height: 1.55; color: var(--text); }
+  .answer.typing::after {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -0.15em;
+    background: var(--orange);
+    animation: blink 0.9s steps(1) infinite;
+  }
+  .placeholder { color: var(--text-soft); }
+</style>

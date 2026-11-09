@@ -1,0 +1,35 @@
+---
+/**
+ * The one page. Sections render from src/content; scripts/main.ts brings
+ * Ruby, the polder and the game to life on top.
+ */
+import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import About from '../components/sections/About.astro';
+import Build from '../components/sections/Build.astro';
+import Contact from '../components/sections/Contact.astro';
+import Hero from '../components/sections/Hero.astro';
+import Work from '../components/sections/Work.astro';
+import PetPanel from '../components/ui/PetPanel.astro';
+import Terminal from '../components/ui/Terminal.astro';
+import Toast from '../components/ui/Toast.astro';
+import Base from '../layouts/Base.astro';
+---
+<Base>
+  <Header />
+  <main id="top">
+    <Hero />
+    <About />
+    <Work />
+    <Build />
+    <Contact />
+  </main>
+  <Footer />
+  <PetPanel />
+  <Terminal />
+  <Toast />
+</Base>
+
+<script>
+  import '../scripts/main';
+</script>

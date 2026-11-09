@@ -1,0 +1,17 @@
+---
+/** A pixel icon from scripts/pixel/icons.ts, as inline SVG. Size it with CSS (width/height). */
+import type { IconName } from '../../content/types';
+import { iconSvg } from '../../scripts/pixel/icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+---
+<span class:list={['pixel-icon', className]} set:html={iconSvg(name)} />
+
+<style>
+  .pixel-icon { display: inline-block; color: inherit; }
+  .pixel-icon :global(svg) { width: 100%; height: 100%; }
+</style>

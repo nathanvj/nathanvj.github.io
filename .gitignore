@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+
+# Brand kit: photos and positioning notes, kept out of the public repo
+branding/
+
+# The original prototype, kept locally
+concept/

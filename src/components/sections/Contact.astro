@@ -1,0 +1,79 @@
+---
+/**
+ * Say hi: email, copy the address, socials, and the corner of a field with the
+ * orange mailbox. The letter on the grass can be posted: it flies into the
+ * mailbox and your mail app opens (scripts/ui/extras.ts). Ruby likes to stand on the lid.
+ */
+import { contact } from '../../content/home';
+import { site } from '../../content/site';
+import { POSTBOX } from '../../scripts/scene/postbox';
+import PixelIcon from '../ui/PixelIcon.astro';
+
+/** native pixels to CSS: the field is drawn on the page's pixel grid */
+const px = (n: number) => `calc(var(--px) * ${n})`;
+const { box, letter, slot } = POSTBOX;
+---
+<section class="section" id="contact" aria-labelledby="contact-title">
+  <div class="wrap contact">
+    <div>
+      <h2 id="contact-title"><span data-platform>{contact.title}</span></h2>
+      <p class="intro">{contact.intro}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${site.email}`} data-send-letter>{site.email}</a>
+        <button class="btn" type="button" data-copy-email>{contact.copyLabel}</button>
+      </div>
+      <ul class="socials">
+        {site.socials.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="postbox" data-postbox style={`width: ${px(POSTBOX.w)}; height: ${px(POSTBOX.h)}`}>
+      <canvas class="field" aria-hidden="true"></canvas>
+      <canvas class="box" aria-hidden="true" data-mailbox style={`left: ${px(box.x)}; top: ${px(box.y)}; width: ${px(box.w)}; height: ${px(box.h)}`}></canvas>
+      <button type="button" class="letter" data-letter aria-label={contact.letter} title={contact.letter}
+        style={`left: ${px(letter.x)}; top: ${px(letter.y)}; width: ${px(letter.w)}; height: ${px(letter.h)}`}>
+        <canvas aria-hidden="true"></canvas>
+      </button>
+      <span class="heart" data-postbox-heart aria-hidden="true" style={`left: ${px(slot.x - 4)}; top: ${px(slot.y - 10)}`}><PixelIcon name="heart" /></span>
+      <div class="lid" data-mailbox-lid data-platform data-say={contact.mailboxSays}></div>
+      <p class="hint">{contact.letterHint}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: end; }
+  .actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 28px 0 0; padding: 0; font: 500 18px/1 var(--font-display); }
+
+  /* ---- the corner of the field */
+  .postbox { position: relative; }
+  .postbox canvas { display: block; }
+  .field { width: 100%; height: 100%; }
+  .box { position: absolute; transform-origin: 50% 100%; }
+  .box:global(.wobble) { animation: wobble 0.42s steps(6); }
+  @keyframes wobble { 20% { rotate: -3deg; } 50% { rotate: 3deg; } 80% { rotate: -1deg; } }
+  .letter {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    animation: bob 2.4s steps(2) infinite;
+  }
+  .letter canvas { width: 100%; height: 100%; }
+  .letter:hover { animation-play-state: paused; translate: 0 calc(var(--px) * -2); }
+  .letter[hidden] { display: none; }
+  @keyframes bob { 50% { translate: 0 calc(var(--px) * -1); } }
+  .heart { position: absolute; width: 30px; height: 30px; color: var(--heart); opacity: 0; pointer-events: none; }
+  .heart :global(.pixel-icon) { width: 100%; height: 100%; }
+  .heart:global(.pop) { animation: pop 1s steps(8); }
+  @keyframes pop { 0% { opacity: 1; translate: 0 0; } 100% { opacity: 0; translate: 0 calc(var(--px) * -14); } }
+  .lid { position: absolute; }
+  .hint { position: absolute; left: 0; right: 0; top: 100%; margin: 10px 0 0; text-align: center; font: 500 14px/1.2 var(--font-display); color: var(--text-soft); }
+  @media (prefers-reduced-motion: reduce) { .letter, .box:global(.wobble), .heart:global(.pop) { animation: none; } }
+  @media (max-width: 760px) {
+    .contact { grid-template-columns: minmax(0, 1fr); }
+    .postbox { justify-self: end; margin: -8px 0 28px; }
+  }
+</style>

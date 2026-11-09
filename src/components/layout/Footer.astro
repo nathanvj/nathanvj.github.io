@@ -1,0 +1,54 @@
+---
+/** A bed of tulips, then the ground: Ruby can walk along it. The heart starts date night. */
+import { site } from '../../content/site';
+import { fill } from '../../lib/rich';
+import Bone from '../ui/Bone.astro';
+---
+<footer class="footer">
+  <div class="bed">
+    <canvas class="tulips" data-tulips aria-hidden="true"></canvas>
+    <Bone id="tulips" style="left: 71%; bottom: 0" />
+  </div>
+  <div class="ground" data-platform>
+    <div class="wrap row">
+      <p>{fill(site.footer.copyright, { year: new Date().getFullYear() })}</p>
+      <p>
+        {site.footer.madeIn}
+        <button type="button" class="heart" data-date-night aria-label={site.footer.heart.label} title={site.footer.heart.bubble}>♥</button>
+      </p>
+      <button type="button" class="text-btn hide" data-hide-ruby>{site.footer.hideRuby}</button>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { margin-top: clamp(80px, 12vw, 140px); }
+  .bed { position: relative; }
+  .tulips { width: 100%; height: calc(var(--px) * 16); }
+  .ground { background: var(--ground); color: var(--on-ground); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-block: 22px 26px; font-size: 15px; }
+  .row p { margin: 0; }
+  .hide { margin-left: auto; }
+  @media (max-width: 640px) { .hide { margin-left: 0; } }
+
+  .heart {
+    padding: 0 2px;
+    border: 0;
+    background: none;
+    color: var(--heart);
+    font: 700 18px/1 var(--font-display);
+    vertical-align: -1px;
+    cursor: pointer;
+  }
+  .heart:hover { transform: scale(1.25); }
+  @media (prefers-reduced-motion: no-preference) {
+    .heart { animation: beat 2.4s steps(1) infinite; }
+  }
+  @keyframes beat {
+    0%, 100% { transform: none; }
+    8% { transform: scale(1.25); }
+    16% { transform: none; }
+    24% { transform: scale(1.18); }
+    32% { transform: none; }
+  }
+</style>

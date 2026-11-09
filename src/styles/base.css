@@ -1,0 +1,48 @@
+/* Base: reset, typography and the page container. Section styles live in their components. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { overflow-x: clip; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--glaze);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img, canvas, svg { display: block; }
+canvas, .pixelated { image-rendering: pixelated; }
+
+a { color: var(--cobalt); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { color: var(--text); }
+
+h1, h2, h3 { font-family: var(--font-display); line-height: 1; margin: 0; letter-spacing: 0; }
+h2 { font-size: clamp(36px, 5vw, 54px); font-weight: 600; margin-bottom: 14px; }
+h3 { font-size: 22px; font-weight: 600; }
+/* headings are platforms for Ruby: the inline-block span gives her the width of the words */
+h1 > span, h2 > span { display: inline-block; }
+
+p { margin: 0 0 1em; }
+
+:focus-visible { outline: var(--px) dashed var(--orange); outline-offset: 5px; }
+
+.wrap { width: 100%; max-width: 1104px; margin-inline: auto; padding-inline: 24px; }
+@media (max-width: 640px) { .wrap { padding-inline: 16px; } }
+
+.section { padding-block: clamp(72px, 10vw, 128px) 0; }
+.intro { color: var(--text-soft); max-width: 60ch; margin-bottom: 40px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

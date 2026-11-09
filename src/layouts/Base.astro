@@ -1,0 +1,53 @@
+---
+/** The HTML shell: meta tags, fonts (self-hosted), global styles and the theme picked before first paint. */
+import '@fontsource-variable/figtree';
+import '@fontsource-variable/pixelify-sans';
+import '@fontsource/vt323';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/pixel.css';
+import '../styles/overlays.css';
+import { site } from '../content/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url);
+const image = new URL('/og.png', site.url);
+---
+<!doctype html>
+<html lang="en" data-theme="day">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <meta name="theme-color" content="#eef7fc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151935" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content={site.twitter} />
+
+    <script is:inline>
+      // Day or night before the first paint: a saved choice wins, otherwise follow the system.
+      try {
+        const saved = localStorage.getItem('nathanvj:theme');
+        const night = saved ? saved === 'night' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = night ? 'night' : 'day';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,74 @@
+---
+/** Name with the pixel avatar, the section links, and buttons for Ruby Run, the terminal and day or night. */
+import { run } from '../../content/run';
+import { site } from '../../content/site';
+import PixelIcon from '../ui/PixelIcon.astro';
+---
+<header class="header wrap" data-run-sky>
+  <a class="brand" href="#top" data-brand data-header-text aria-label={`${site.name}, back to top`}>
+    <canvas class="avatar" width="24" height="24" data-portrait aria-hidden="true"></canvas>
+    <span>{site.name}</span>
+  </a>
+  <nav aria-label="Sections" data-header-text>
+    {site.nav.map((l) => <a href={l.href}>{l.label}</a>)}
+  </nav>
+  <div class="tools" data-header-text>
+    <button class="icon-btn" type="button" data-run-play aria-label={run.play} title={run.play}>
+      <PixelIcon name="game" />
+    </button>
+    <button class="icon-btn" type="button" data-terminal-toggle aria-label="Open the terminal" aria-expanded="false" title="Terminal ( ` )">
+      <PixelIcon name="term" />
+    </button>
+    <button class="icon-btn theme" type="button" data-theme-toggle aria-label="Switch to night" title="Day or night">
+      <PixelIcon name="moon" class="to-night" />
+      <PixelIcon name="sun" class="to-day" />
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: relative;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-block: 18px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font: 700 20px/1 var(--font-display);
+  }
+  /* 24 native pixels, shown at 1.5×: crisp on any 2× screen */
+  .avatar { width: 36px; height: 36px; }
+  nav { display: flex; gap: 4px; margin-left: auto; }
+  nav a {
+    padding: 8px 12px;
+    color: var(--text);
+    text-decoration: none;
+    font: 500 17px/1 var(--font-display);
+  }
+  nav a:hover { background: var(--mist); }
+  .tools { display: flex; gap: 4px; }
+  .icon-btn :global(.pixel-icon) { width: 24px; height: 24px; }
+  /* the theme button shows where you can go: a moon by day, a sun at night */
+  .theme :global(.to-day) { display: none; }
+  :global([data-theme='night']) .theme :global(.to-day) { display: inline-block; }
+  :global([data-theme='night']) .theme :global(.to-night) { display: none; }
+  @media (max-width: 720px) {
+    nav { display: none; }
+    .tools { margin-left: auto; }
+  }
+  /* phones: name, avatar and three buttons on one line */
+  @media (max-width: 420px) {
+    .header { gap: 8px; }
+    .brand { gap: 8px; font-size: 17px; white-space: nowrap; }
+    .avatar { width: 32px; height: 32px; }
+    .tools { gap: 0; }
+    .tools .icon-btn { width: 38px; }
+  }
+</style>

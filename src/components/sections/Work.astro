@@ -1,0 +1,107 @@
+---
+/** The work timeline, newest first, with pixel logos. Every card is a platform for Ruby. */
+import { work } from '../../content/home';
+import { rich } from '../../lib/rich';
+import Bone from '../ui/Bone.astro';
+import PixelIcon from '../ui/PixelIcon.astro';
+---
+<section class="section" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <h2 id="work-title"><span data-platform>{work.title}</span></h2>
+    <p class="intro">{work.intro}</p>
+
+    <ol class="timeline">
+      {work.entries.map((e) => (
+        <li class:list={['entry', e.current && 'now']}>
+          <article
+            class="tile card"
+            data-platform
+            data-say={e.rubySays}
+            data-hat={e.hat?.name}
+            data-hat-says={e.hat?.says}
+          >
+            <header>
+              <span class="logo">
+                {'src' in e.logo && <img src={e.logo.src} alt="" width={e.logo.width} height={e.logo.height} data-pixel-logo class="pixelated" />}
+                {'portrait' in e.logo && <canvas width="24" height="24" data-portrait aria-hidden="true" class="portrait"></canvas>}
+                {'icon' in e.logo && <PixelIcon name={e.logo.icon} class="logo-icon" />}
+              </span>
+              <div>
+                <h3>{e.role} at {e.url ? <a href={e.url} target="_blank" rel="noopener">{e.company}</a> : e.company}</h3>
+                <p class="meta"><span>{e.period}</span><span>{e.location}</span></p>
+              </div>
+              <span class:list={['badge', e.current && 'badge-now']}>{e.current ? 'In progress' : 'Completed'}</span>
+            </header>
+            <p set:html={rich(e.description)} />
+            {e.highlights && <ul>{e.highlights.map((h) => <li>{h}</li>)}</ul>}
+          </article>
+        </li>
+      ))}
+    </ol>
+    <div class="road-end">
+      <Bone id="quest" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 40px; position: relative; display: grid; gap: 36px; }
+  /* the dashed road on the left, with a square stop per job (orange while in progress) */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    bottom: -40px;
+    width: var(--px);
+    background: repeating-linear-gradient(to bottom, var(--sky) 0 calc(var(--px) * 2), transparent 0 calc(var(--px) * 4));
+  }
+  .entry { position: relative; }
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: -34px;
+    top: 26px;
+    width: calc(var(--px) * 4);
+    height: calc(var(--px) * 4);
+    background: var(--tile);
+    box-shadow: 0 0 0 var(--px) var(--edge);
+  }
+  .entry.now::before { background: var(--orange); }
+
+  .card { padding: 22px 24px 20px; max-width: 820px; }
+  .card header { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; margin-bottom: 14px; }
+  .card h3 { font-size: 23px; line-height: 1.15; }
+  .card h3 a { color: inherit; }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; font-size: 15px; color: var(--text-soft); }
+  .meta span:first-child { font-family: var(--font-display); color: var(--text); }
+  .card > p { color: var(--text-soft); margin-bottom: 10px; max-width: 64ch; }
+  ul { list-style: none; margin: 0; padding: 0; font-size: 16px; }
+  li { position: relative; padding-left: 20px; margin-top: 4px; }
+  li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: calc(var(--px) * 2); height: calc(var(--px) * 2); background: var(--cobalt); }
+
+  /* logos sit on a white tile in both themes, like app icons */
+  .logo {
+    display: grid;
+    place-items: center;
+    width: calc(var(--px) * 18);
+    height: calc(var(--px) * 18);
+    background: #fff;
+    color: #101a52;
+    box-shadow: 0 0 0 var(--px) var(--edge);
+  }
+  .portrait { width: calc(var(--px) * 16); height: calc(var(--px) * 16); }
+  .logo :global(.logo-icon) { width: calc(var(--px) * 12); height: calc(var(--px) * 12); }
+
+  /* the end of the road, where the timeline stops */
+  .road-end { position: relative; height: calc(var(--px) * 14); margin-left: 4px; }
+  .road-end :global(.bone) { left: 0; bottom: 0; }
+
+  @media (max-width: 640px) {
+    .timeline { padding-left: 26px; }
+    .timeline::before { left: 6px; }
+    .entry::before { left: -24px; }
+    .card header { grid-template-columns: auto 1fr; }
+    .card header .badge { grid-column: 1 / -1; justify-self: start; }
+  }
+</style>

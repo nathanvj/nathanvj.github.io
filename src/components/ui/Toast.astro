@@ -1,0 +1,23 @@
+---
+/** Little messages at the bottom of the screen (scripts/ui/toast.ts). */
+---
+<div class="toast pixel-box" data-toast role="status" aria-live="polite"></div>
+
+<style>
+  .toast {
+    --lift: var(--b);
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    z-index: var(--z-toast);
+    padding: 10px 16px 9px;
+    background: var(--tile);
+    color: var(--text);
+    font: 500 17px/1 var(--font-display);
+    pointer-events: none;
+    transform: translate(-50%, 240%);
+    visibility: hidden;
+    transition: transform 0.18s steps(3), visibility 0s 0.18s;
+  }
+  .toast:global(.show) { transform: translate(-50%, 0); visibility: visible; transition-delay: 0s; }
+</style>

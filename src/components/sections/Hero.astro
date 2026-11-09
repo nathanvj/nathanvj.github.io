@@ -1,0 +1,71 @@
+---
+/**
+ * The polder with the intro on top. The painted scene is a canvas (scene/landscape.ts);
+ * the bike path is a platform for Ruby, and the headline is too.
+ * It is also where Ruby Run is played: the land scrolls, and the buttons
+ * under the intro make way for the scores (RubyRun.astro).
+ */
+import { hero } from '../../content/home';
+import { run } from '../../content/run';
+import { rich } from '../../lib/rich';
+import Bone from '../ui/Bone.astro';
+import PixelIcon from '../ui/PixelIcon.astro';
+import RubyRun from '../ui/RubyRun.astro';
+---
+<section class="hero" aria-labelledby="hello" data-run-stage data-run-sky>
+  <div class="scene" data-platform data-ground="street" data-say={hero.streetSays} tabindex="-1">
+    <canvas aria-hidden="true"></canvas>
+  </div>
+  <div class="copy wrap">
+    <h1 id="hello"><span data-platform data-platform-offset="0.16em" data-say={hero.rubySays} data-hero-text>{hero.title}</span></h1>
+    <p class="lede" data-hero-text set:html={rich(hero.lede)} />
+    <div class="actions-row">
+      <div class="actions">
+        {hero.actions.map((a, i) => <a class:list={['btn', i === 0 && 'btn-primary']} href={a.href} data-hero-text>{a.label}</a>)}
+        <button type="button" class="text-btn play" data-run-play data-hero-text><PixelIcon name="game" class="play-icon" />{run.play}</button>
+      </div>
+      <RubyRun />
+    </div>
+  </div>
+  <div class="ground" aria-hidden="true" data-run-field></div>
+  <Bone id="street" style="left: 6%; bottom: calc(var(--px) * 27)" />
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    /* the painted sky runs up behind the header */
+    margin-top: -78px;
+    padding-top: 78px;
+  }
+  .scene { position: absolute; inset: 0; outline: 0; }
+  .scene canvas { position: absolute; left: 0; bottom: 0; }
+  .copy { position: relative; z-index: var(--z-content); padding-top: clamp(32px, 7vh, 88px); }
+  h1 {
+    font-size: clamp(54px, 10vw, 124px);
+    font-weight: 700;
+    line-height: 0.95;
+    margin-bottom: 26px;
+    text-shadow: 0 calc(var(--px) * 2) 0 var(--headline-shadow);
+  }
+  .lede { font-size: clamp(18px, 2.1vw, 22px); line-height: 1.5; max-width: 36em; margin-bottom: 30px; }
+  .actions-row { position: relative; }
+  .actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  /* while Ruby Run is on, the scores take the buttons' place */
+  :global(:root[data-run]) .actions { visibility: hidden; }
+  .play {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 4px;
+    color: var(--text);
+    font: 600 17px/1 var(--font-display);
+    text-decoration: none;
+  }
+  .play:hover { color: var(--cobalt); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .play :global(.play-icon) { width: 24px; height: 24px; }
+  /* room for the houses, the street and the water (native rows × the pixel) */
+  .ground { height: calc(var(--px) * 96); }
+  @media (max-width: 640px) { .ground { height: calc(var(--px) * 104); } }
+</style>

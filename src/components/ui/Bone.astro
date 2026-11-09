@@ -1,0 +1,38 @@
+---
+/**
+ * A hidden bone. Place it anywhere (absolutely positioned via `style` or `class`),
+ * and make sure its id is listed in game.bones in src/content/ruby.ts.
+ */
+import { BONE_SVG } from '../../scripts/pixel/icons';
+
+interface Props {
+  id: string;
+  style?: string;
+  class?: string;
+}
+const { id, style, class: className } = Astro.props;
+---
+<button type="button" class:list={['bone', className]} data-bone={id} aria-label="A hidden bone" style={style} set:html={BONE_SVG} />
+
+<style>
+  .bone {
+    position: absolute;
+    z-index: var(--z-bones);
+    width: calc(var(--px) * 12);
+    height: calc(var(--px) * 7);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  /* a generous click area around a small target */
+  .bone::before { content: ''; position: absolute; inset: -12px; }
+  .bone :global(svg) { width: 100%; height: 100%; }
+  .bone:hover { transform: translateY(calc(var(--px) * -1)); }
+  .bone[hidden] { display: none; }
+  .bone:global(.found) { animation: dug-up 0.4s steps(4) forwards; }
+  @keyframes dug-up {
+    50% { transform: translateY(calc(var(--px) * -6)) scale(1.3); }
+    100% { transform: translateY(calc(var(--px) * -10)); opacity: 0; }
+  }
+</style>

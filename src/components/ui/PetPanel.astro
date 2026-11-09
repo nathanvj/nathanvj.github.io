@@ -1,0 +1,145 @@
+---
+/**
+ * Ruby's panel, bottom left: moods, level, treat and ball buttons, Ruby Run, bones
+ * (how many, never where) and achievements. scripts/game/panel.ts keeps it up to date.
+ */
+import { game, ruby } from '../../content/ruby';
+import PixelIcon from './PixelIcon.astro';
+
+const moods = [
+  { key: 'happy', icon: 'heart', label: game.panel.moods.happy },
+  { key: 'full', icon: 'bone', label: game.panel.moods.full },
+  { key: 'energy', icon: 'bolt', label: game.panel.moods.energy },
+] as const;
+---
+<aside class="pet" data-pet aria-label={ruby.name}>
+  <div class="panel tile" data-pet-panel hidden>
+    <div class="head">
+      <div>
+        <h2>{ruby.name} <span class="lv">Lv <b data-level>1</b></span></h2>
+        <p data-next></p>
+      </div>
+      <button type="button" class="close" data-pet-close aria-label="Close">×</button>
+    </div>
+
+    <ul class="moods">
+      {moods.map((m) => (
+        <li class={`mood-${m.key}`}>
+          <PixelIcon name={m.icon} class="m-icon" />
+          <span>{m.label}</span>
+          <span class="bar" data-mood={m.key} role="meter" aria-label={m.label} aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></span>
+        </li>
+      ))}
+    </ul>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" data-pet-treat>{game.panel.treat}</button>
+      <button type="button" class="btn" data-pet-ball>{game.panel.ball}</button>
+      <button type="button" class="btn" data-run-play><PixelIcon name="game" class="btn-icon" />{game.panel.run}</button>
+    </div>
+
+    <h3 class="title">{game.bonesTitle} <span data-bone-count>0 of {game.bones.length}</span></h3>
+    <div class="bones" aria-hidden="true">
+      {game.bones.map(() => <span class="bone-slot" data-bone-slot><PixelIcon name="bone" /></span>)}
+    </div>
+    <p class="note" data-bone-note>{game.bonesNote}</p>
+
+    <h3 class="title">{game.achievementsTitle} <span data-ach-count>0 of {game.achievements.length}</span></h3>
+    <ul class="achievements">
+      {game.achievements.map((a) => (
+        <li class="ach" data-ach={a.id} data-name={a.secret ? a.name : undefined} data-how={a.secret ? a.how : undefined}>
+          <PixelIcon name={a.icon} class="ach-icon" />
+          <span><b>{a.secret ? game.panel.secret : a.name}</b><small>{a.secret ?? a.how}</small></span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <button type="button" class="toggle tile" data-pet-toggle aria-expanded="false">
+    <canvas class="face" width="16" height="16" data-pet-face aria-hidden="true"></canvas>
+    <span class="name">{ruby.name}</span>
+    <span class="lv">Lv <b data-level>1</b></span>
+    <span class="mini" aria-hidden="true">
+      {moods.map((m) => <i class={`mood-${m.key}`} data-mood={m.key}></i>)}
+    </span>
+  </button>
+</aside>
+
+<style>
+  .pet { position: fixed; left: 16px; bottom: 18px; z-index: var(--z-panel); }
+  .mood-happy { --fill: var(--heart); }
+  .mood-full { --fill: var(--orange); }
+  .mood-energy { --fill: var(--cobalt); }
+
+  .toggle {
+    --lift: var(--b);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 6px 12px 6px 6px;
+    border: 0;
+    background: var(--tile);
+    color: var(--text);
+    font: 600 16px/1 var(--font-display);
+    cursor: pointer;
+  }
+  .toggle:hover { background: var(--mist); }
+  .face { width: 32px; height: 32px; background: var(--mist); }
+  .lv { font-weight: 500; font-size: 14px; color: var(--text-soft); }
+  .lv b { color: var(--text); }
+  .mini { display: grid; gap: 2px; }
+  .mini i { display: block; width: 26px; height: 4px; background: linear-gradient(to right, var(--fill) calc(var(--v, 0) * 100%), var(--mist) 0); }
+
+  .panel {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 18px);
+    width: min(380px, calc(100vw - 32px));
+    max-height: min(640px, calc(100vh - 120px));
+    overflow-y: auto;
+    padding: 18px 20px 16px;
+  }
+  .panel[hidden] { display: none; }
+  .head { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-bottom: 14px; }
+  .head h2 { font-size: 28px; margin: 0 0 4px; }
+  .head h2 .lv { font-size: 16px; }
+  .head p { margin: 0; font-size: 14px; color: var(--text-soft); }
+  .close { width: 30px; height: 30px; border: 0; background: transparent; color: var(--text); font: 700 22px/1 var(--font-display); cursor: pointer; }
+  .close:hover { background: var(--mist); }
+
+  .moods { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+  .moods li { display: grid; grid-template-columns: 22px 64px 1fr; gap: 8px; align-items: center; font: 500 15px/1 var(--font-display); }
+  .moods :global(.m-icon) { width: 20px; height: 20px; color: var(--text); }
+  /* a segmented pixel bar: the fill is a gradient, the gaps are a mask */
+  .bar {
+    height: calc(var(--px) * 4);
+    background: linear-gradient(to right, var(--fill) calc(var(--v, 0) * 100%), var(--mist) 0);
+    -webkit-mask: repeating-linear-gradient(to right, #000 0 calc(var(--px) * 3), transparent 0 calc(var(--px) * 4));
+    mask: repeating-linear-gradient(to right, #000 0 calc(var(--px) * 3), transparent 0 calc(var(--px) * 4));
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+  .actions .btn { font-size: 16px; min-height: 40px; padding: 9px 14px 8px; }
+  .actions :global(.btn-icon) { width: 20px; height: 20px; }
+
+  .title { font-size: 18px; margin: 10px 0; display: flex; justify-content: space-between; }
+  .title span { font-weight: 500; font-size: 14px; color: var(--text-soft); }
+  .bones { display: flex; gap: 10px; }
+  .bone-slot { width: 36px; height: 36px; color: var(--text-soft); opacity: 0.3; }
+  .bone-slot.got { color: var(--text); opacity: 1; }
+  .bone-slot :global(.pixel-icon) { width: 100%; height: 100%; }
+  .note { margin: 4px 0 8px; font-size: 13px; color: var(--text-soft); }
+
+  .achievements { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ach { display: flex; gap: 8px; align-items: center; padding: 6px; background: var(--glaze); box-shadow: inset 0 0 0 2px var(--mist); opacity: 0.55; }
+  .ach.got { opacity: 1; background: var(--tile); box-shadow: inset 0 0 0 2px var(--orange); }
+  .ach :global(.ach-icon) { flex: none; width: 24px; height: 24px; color: var(--text); }
+  .ach:not(.got) :global(.ach-icon) { filter: grayscale(1); }
+  .ach b { display: block; font: 600 14px/1.1 var(--font-display); }
+  .ach small { display: block; font-size: 12px; line-height: 1.25; color: var(--text-soft); }
+
+  @media (max-width: 640px) {
+    .pet { left: 12px; bottom: 12px; }
+    .mini { display: none; }
+  }
+</style>

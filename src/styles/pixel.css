@@ -1,0 +1,115 @@
+/*
+  The pixel kit: tiles, buttons, chips and badges.
+
+  Borders and depth are box-shadows on the pixel grid. Leaving the corners
+  out of the border gives a one-step pixel curve, and --lift is the tile's
+  thickness: a darker slab below, like a real ceramic tile. Pressing a button
+  sets --lift to 0 and moves it down by the same amount.
+*/
+
+.tile, .btn, .chip, .badge, .pixel-box {
+  --b: var(--px);
+  --lift: calc(var(--b) * 2);
+  box-shadow:
+    0 calc(var(--b) * -1) 0 0 var(--edge),
+    calc(var(--b) * -1) 0 0 0 var(--edge),
+    var(--b) 0 0 0 var(--edge),
+    0 var(--b) 0 0 var(--edge),
+    calc(var(--b) * -1) var(--lift) 0 0 var(--edge),
+    var(--b) var(--lift) 0 0 var(--edge),
+    0 var(--lift) 0 0 var(--depth, var(--sky)),
+    0 calc(var(--lift) + var(--b)) 0 0 var(--edge);
+}
+
+.tile {
+  position: relative;
+  background: var(--tile);
+  padding: 24px;
+  margin-bottom: calc(var(--px) * 3);
+}
+
+/* ------------------------------------------------------------------ buttons */
+.btn {
+  --depth: var(--sky);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 12px 20px 11px;
+  border: 0;
+  background: var(--tile);
+  color: var(--text);
+  font: 600 18px/1 var(--font-display);
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: calc(var(--px) * 3);
+}
+.btn:hover { background: var(--mist); color: var(--text); }
+.btn:active { --lift: 0px; transform: translateY(calc(var(--px) * 2)); }
+.btn-primary { --depth: var(--orange-deep); background: var(--orange); color: var(--on-orange); }
+.btn-primary:hover { background: var(--orange-hover); color: var(--on-orange); }
+
+.chip {
+  --lift: var(--b);
+  --depth: var(--sky);
+  border: 0;
+  padding: 6px 11px 5px;
+  background: var(--tile);
+  color: var(--text);
+  font: 500 15px/1.15 var(--font-display);
+  text-align: left;
+  cursor: pointer;
+}
+.chip:hover { background: var(--mist); }
+.chip:active { --lift: 0px; transform: translateY(var(--px)); }
+.chip[aria-pressed='true'] { --depth: var(--orange-deep); background: var(--orange); color: var(--on-orange); }
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.icon-btn:hover { background: var(--mist); }
+.icon-btn svg { width: 24px; height: 24px; }
+
+.text-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ badges */
+.badge {
+  --lift: 0px;
+  display: inline-block;
+  padding: 5px 10px 4px;
+  background: var(--mist);
+  color: var(--text);
+  font: 500 14px/1 var(--font-display);
+  white-space: nowrap;
+}
+.badge-now { background: var(--orange); color: var(--on-orange); }
+.badge-now::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  vertical-align: 2px;
+  background: currentColor;
+  animation: blink 1.2s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .badge-now::before { animation: none; } }

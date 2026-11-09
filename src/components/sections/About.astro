@@ -1,0 +1,72 @@
+---
+/**
+ * About: the photo, the story, and a few facts. Kept quiet on purpose: the
+ * photo gets the same pixel edge and coral shadow as the headline, and that
+ * is all the decoration there is.
+ */
+import { about } from '../../content/home';
+import { rich } from '../../lib/rich';
+import Bone from '../ui/Bone.astro';
+---
+<section class="section" id="about" aria-labelledby="about-title">
+  <div class="wrap about">
+    <figure class="photo">
+      <img src={about.photo.src} alt={about.photo.alt} width="720" height="720" loading="lazy" decoding="async" data-platform data-say={about.photo.rubySays} />
+      <figcaption>{about.photo.caption}</figcaption>
+      <Bone id="photo" class="behind-photo" />
+    </figure>
+
+    <div class="story">
+      <h2 id="about-title"><span data-platform>{about.title}</span></h2>
+      {about.paragraphs.map((p) => <p set:html={rich(p)} />)}
+      <dl class="facts" data-platform data-say={about.facts.rubySays}>
+        {about.facts.rows.map((r) => <div><dt>{r.label}</dt><dd>{r.value}</dd></div>)}
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 72px; align-items: start; }
+  @media (max-width: 860px) {
+    .about { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .photo { max-width: 260px; }
+  }
+
+  /* the photo: a pixel edge, and the same coral shadow as the headline */
+  .photo { position: relative; margin: 0; }
+  .photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    image-rendering: auto;
+    box-shadow:
+      0 calc(var(--px) * -1) 0 0 var(--edge),
+      calc(var(--px) * -1) 0 0 0 var(--edge),
+      var(--px) 0 0 0 var(--edge),
+      0 var(--px) 0 0 var(--edge),
+      calc(var(--px) * 4) calc(var(--px) * 4) 0 0 var(--headline-shadow);
+  }
+  figcaption { padding-top: 22px; font: 500 15px/1.2 var(--font-display); color: var(--text-soft); }
+  .photo :global(.behind-photo) { right: calc(var(--px) * -9); top: 58%; rotate: -24deg; }
+
+  .story h2 { margin-bottom: 24px; }
+  .story > p { max-width: 60ch; }
+
+  /* a few facts, as quiet as the rest */
+  .facts {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 10px 28px;
+    max-width: 60ch;
+    margin: 32px 0 0;
+    padding-top: 24px;
+    border-top: 2px dotted var(--sky);
+  }
+  .facts div { display: contents; }
+  dt { font: 500 16px/1.5 var(--font-display); color: var(--text-soft); }
+  dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  @media (max-width: 520px) { .facts { grid-template-columns: minmax(0, 1fr); gap: 0; } dd { margin-bottom: 10px; } }
+</style>
