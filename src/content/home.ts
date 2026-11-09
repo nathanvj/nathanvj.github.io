@@ -23,7 +23,7 @@ export const about = {
   title: 'About',
   photo: {
     src: '/img/about.jpg',
-    alt: 'Nathan van Jole, laughing, in a brown polo',
+    alt: 'Nathan van Jole, smiling, in a checked shirt',
     caption: 'Nathan, at full resolution.',
     rubySays: 'Looking good.',
   },
