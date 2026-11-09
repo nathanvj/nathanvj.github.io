@@ -38,9 +38,8 @@ export const about = {
       { label: 'Based in', value: 'The Netherlands' },
       { label: 'Writing code since', value: '2012' },
       { label: 'Building', value: 'Advey' },
-      { label: 'Often seen with', value: 'Ruby, the beagle on this page' },
     ],
-    rubySays: "That's me, in the last row.",
+    rubySays: 'Just the facts.',
   },
 };
 
@@ -61,8 +60,7 @@ export const work = {
         'An AI platform that records and transcribes client meetings for financial advisors, then turns them into structured, compliance-ready reports. "You became an advisor, not a note-taker."',
       highlights: [
         'Technical vision, architecture and product engineering, from idea to production',
-        'EU-based AI processing on Azure with end-to-end encryption',
-        'Compliant dossier generation by default',
+        'The AI pipeline, from recorded meeting to finished report',
       ],
       rubySays: 'This is the big one right now.',
     },
@@ -131,7 +129,7 @@ export const build = {
   featured: {
     icon: 'spark',
     title: 'AI that does real work',
-    text: 'LLM features, agents and pipelines that hold up in production: retrieval over your own data, speech to structured documents, and evaluations so you know it actually works. At Advey this turns hour-long client meetings into compliant reports, processed in the EU.',
+    text: 'LLM features, agents and pipelines that hold up in production: retrieval over your own data, speech to structured documents, and evaluations so you know it actually works. At Advey this turns hour-long client meetings into structured reports.',
   } satisfies Ability,
   rubySays: 'This is the fun part.',
   abilities: [
@@ -143,7 +141,7 @@ export const build = {
     {
       icon: 'shield',
       title: 'Systems that stay up',
-      text: 'Security, compliance, performance and the unglamorous parts: encryption, monitoring, and code the next developer can actually read.',
+      text: 'Performance, monitoring and the other unglamorous parts, like code the next developer can actually read.',
     },
   ] satisfies Ability[],
   /** the "Ask me something" box: pick a question, the answer types itself out */
@@ -155,7 +153,7 @@ export const build = {
         id: 'advey',
         question: 'What are you building at Advey?',
         answer:
-          'Advey records and transcribes client meetings for financial advisors, then turns them into structured, compliance-ready reports. As CTO I own the architecture and the AI pipeline, from speech to the final report, with processing in the EU and end-to-end encryption.',
+          'Advey records and transcribes client meetings for financial advisors, then turns them into structured, compliance-ready reports. As CTO I own the architecture and the AI pipeline, from speech to the final report.',
       },
       {
         id: 'reliable',
