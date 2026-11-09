@@ -7,6 +7,7 @@
  */
 import { hero } from '../../content/home';
 import { run } from '../../content/run';
+import { rich } from '../../lib/rich';
 import Bone from '../ui/Bone.astro';
 import PixelIcon from '../ui/PixelIcon.astro';
 import RubyRun from '../ui/RubyRun.astro';
@@ -17,6 +18,7 @@ import RubyRun from '../ui/RubyRun.astro';
   </div>
   <div class="copy wrap">
     <h1 id="hello"><span data-platform data-platform-offset="0.16em" data-say={hero.rubySays} data-hero-text>{hero.title}</span></h1>
+    <p class="lede" data-hero-text set:html={rich(hero.lede)} />
     <div class="actions-row">
       <div class="actions">
         {hero.actions.map((a, i) => <a class:list={['btn', i === 0 && 'btn-primary']} href={a.href} data-hero-text>{a.label}</a>)}
@@ -44,10 +46,11 @@ import RubyRun from '../ui/RubyRun.astro';
     font-size: clamp(54px, 10vw, 124px);
     font-weight: 700;
     line-height: 0.95;
-    /* room under the greeting, on the pixel grid: 60px, 40px on phones */
-    margin-bottom: calc(var(--px) * 20);
+    /* room under the greeting, on the pixel grid: 30px, 20px on phones */
+    margin-bottom: calc(var(--px) * 10);
     text-shadow: 0 calc(var(--px) * 2) 0 var(--headline-shadow);
   }
+  .lede { font-size: clamp(18px, 2.1vw, 22px); line-height: 1.5; max-width: 36em; margin-bottom: calc(var(--px) * 12); }
   .actions-row { position: relative; }
   .actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
   /* while Ruby Run is on, the scores take the buttons' place */
