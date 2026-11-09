@@ -88,6 +88,7 @@ export function mountTerminal({ world, game, party, play }: Deps): { toggle: () 
         break;
       case 'build':
       case 'stack':
+        print('  ', ['ok', `${build.now.label}: ${build.now.name}`]);
         build.abilities.forEach((a) => print('  ', ['ok', a.title]));
         break;
       case 'contact':

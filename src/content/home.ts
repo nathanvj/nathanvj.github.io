@@ -125,13 +125,23 @@ export const work = {
 // ------------------------------------------------------------------ what I build
 export const build = {
   title: 'What I build',
-  intro: 'Give me a problem, not a tech stack. These days the problem usually involves AI.',
+  intro: "What I'm working on now, and the kind of work I like doing.",
   rubySays: 'This is the fun part.',
+  /** the Advey card on top, with the little animation of what it does */
+  now: {
+    label: 'Now building',
+    name: 'Advey',
+    url: 'https://advey.ai',
+    text: 'Software for financial advisors. It listens in on the client meeting and does the paperwork: the summary, the client file and the report. The advisor checks it and signs off.',
+    /** the four steps light up in turn as the animation plays */
+    steps: ['Record', 'Summary', 'Client file', 'Report'],
+    rubySays: "Shh, they're in a meeting.",
+  },
   abilities: [
     {
       icon: 'cube',
       title: 'Whole products, back to front',
-      text: "From the first sketch to production: architecture, APIs, databases, frontends, and the design in between. I'd rather own the whole thing than hand it off halfway.",
+      text: 'I like working on the whole product, from the first sketch to production, not just one part of it.',
     },
     {
       icon: 'shield',

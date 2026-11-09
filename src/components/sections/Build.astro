@@ -1,5 +1,5 @@
 ---
-/** What I build: two cards. */
+/** What I build: Advey on top, with a little animation of what it does; then two smaller cards. */
 import { build } from '../../content/home';
 import { rich } from '../../lib/rich';
 import PixelIcon from '../ui/PixelIcon.astro';
@@ -10,6 +10,23 @@ import PixelIcon from '../ui/PixelIcon.astro';
     <p class="intro">{build.intro}</p>
 
     <div class="grid">
+      <article class="tile now" data-platform data-say={build.now.rubySays}>
+        <div class="now-text">
+          <span class="badge badge-now">{build.now.label}</span>
+          <h3>
+            <span class="logo"><img src="/img/logos/advey.png" alt="" width="14" height="13" data-pixel-logo class="pixelated" /></span>
+            <a href={build.now.url} target="_blank" rel="noopener">{build.now.name}</a>
+          </h3>
+          <p>{build.now.text}</p>
+          <ol class="steps">
+            {build.now.steps.map((s) => <li data-advey-step>{s}</li>)}
+          </ol>
+        </div>
+        <div class="stage">
+          <canvas width="148" height="56" data-advey-scene aria-hidden="true"></canvas>
+        </div>
+      </article>
+
       {build.abilities.map((a, i) => (
         <article class="tile ability" data-platform data-say={i === 0 ? build.rubySays : undefined}>
           <div class="head"><PixelIcon name={a.icon} class="icon" /><h3>{a.title}</h3></div>
@@ -25,6 +42,37 @@ import PixelIcon from '../ui/PixelIcon.astro';
   @media (max-width: 860px) {
     .grid { grid-template-columns: minmax(0, 1fr); }
   }
+
+  /* Advey: the text on the left, the animation on the right; stacked on smaller screens */
+  .now { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; padding: 28px; }
+  @media (max-width: 1000px) {
+    .now { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .now { padding: 20px 16px; }
+  }
+  .now h3 { display: flex; align-items: center; gap: 12px; margin: 16px 0 10px; font-size: clamp(26px, 3vw, 32px); line-height: 1.1; }
+  .now h3 a { color: inherit; }
+  /* the logo on a white tile, as on the work cards, so the navy reads at night too */
+  .logo { display: grid; place-items: center; width: calc(var(--px) * 16); height: calc(var(--px) * 16); background: #fff; box-shadow: 0 0 0 var(--px) var(--edge); }
+  .now p { color: var(--text-soft); max-width: 46ch; margin: 0; }
+  .stage {
+    display: grid;
+    place-items: center;
+    padding: calc(var(--px) * 6) calc(var(--px) * 5) calc(var(--px) * 4);
+    background: var(--glaze);
+    box-shadow: inset 0 0 0 var(--px) var(--mist);
+  }
+  /* sized by the script to a whole number of page pixels; this is the size until it runs */
+  .stage canvas { display: block; width: 444px; height: 168px; max-width: 100%; }
+
+  .steps { display: flex; flex-wrap: wrap; gap: 8px 22px; list-style: none; margin: 20px 0 0; padding: 0; counter-reset: step; }
+  /* no ligatures: the pixel font draws "fi" as one odd glyph */
+  .steps li { counter-increment: step; font: 500 15px/1 var(--font-display); font-variant-ligatures: none; color: var(--text-soft); }
+  .steps li::before { content: counter(step) ' '; }
+  .steps li[data-on] { color: var(--text); }
+  .steps li[data-on]::before { color: var(--orange); }
+
   .head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
   .head h3 { font-size: 24px; line-height: 1.15; }
   .head :global(.icon) { flex: none; width: calc(var(--px) * 12); height: calc(var(--px) * 12); color: var(--text); }

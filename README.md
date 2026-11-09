@@ -83,6 +83,9 @@ A few strings have `{placeholders}`, like `'Bone {n} of {total}'`; keep those wo
 - **Add or change a job**: add an entry to `work.entries` in `home.ts`. Logos are tiny
   pixel PNGs in `public/img/logos/` (shown at their native size times the page pixel);
   you can also use `{ portrait: true }` (the pixel Nathan) or `{ icon: 'cap' }`.
+- **The Advey card** in What I build: the text and the four steps are `build.now` in
+  `home.ts`. The animation is `scripts/pixel/advey.ts`: a 12-second loop, three seconds
+  per step.
 - **Give Ruby a hat on a card**: add `hat: { name: 'crown', says: 'Boss mode.' }` to that
   job. Hats: `cap`, `hardhat`, `crown`, `party`.
 - **What Ruby says somewhere**: `rubySays` on a section or job. Her own lines are in `ruby.ts`;
@@ -144,7 +147,8 @@ achievements without Ruby knowing a game exists.
   draws simple shapes, adds a 1px outline and becomes a canvas. Ruby (`ruby.ts`) is a
   rig, not a sprite sheet: `drawRuby(buffer, pose)` paints her for any pose, so walking,
   squash and stretch, eye tracking, wagging and hats are just numbers. Icons are text
-  templates turned into inline SVG, usable at build time and in the browser.
+  templates turned into inline SVG, usable at build time and in the browser. `advey.ts`
+  is the little scene on the Advey card: the meeting, Advey, and the report writing itself.
 - **`scene/`**: the hero landscape. `landscape.ts` paints the sky, the red bike path Ruby
   walks on and the ditch in front of it, and animates clouds, stars, water, Kwak the duck
   and the boat at 12 fps. The duck and the boat are on a second canvas above Ruby, because

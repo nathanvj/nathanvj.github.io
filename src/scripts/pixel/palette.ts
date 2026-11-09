@@ -75,6 +75,11 @@ const COLORS = {
   caramel: '#c26a26',
   /** the outline of obstacles at night, so they read on dark cobbles */
   rim: '#7d93dc',
+
+  // Advey: its navy and orange, and the green check on a finished report
+  advey: '#07274d',
+  adveyOrange: '#e8650a',
+  ok: '#2fb36a',
 } as const;
 
 export type Color = keyof typeof COLORS;

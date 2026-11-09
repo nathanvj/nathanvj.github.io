@@ -1,11 +1,12 @@
 /**
  * Boots the page, in order:
- *   1. things that only paint (theme toggle, the polder, tulips, mailbox, logos, avatar)
+ *   1. things that only paint (theme toggle, the polder, tulips, mailbox, logos, avatar, the Advey card)
  *   2. Ruby's world, once the fonts are in (so platforms are measured on real text)
  *   3. the game, Ruby Run, the terminal and the easter eggs, which all build on Ruby
  * Everything here is progressive: without JavaScript the page is complete, just still.
  */
 import { Game } from './game/game';
+import { mountAdvey } from './ui/advey';
 import { onTick } from './mascot/loop';
 import { PageWorld } from './mascot/world';
 import { Landscape } from './scene/landscape';
@@ -21,6 +22,7 @@ mountTheme();
 mountLogos();
 mountPortraits();
 mountProps();
+mountAdvey();
 
 const streetHost = document.querySelector<HTMLElement>('[data-ground="street"]')!;
 const land = new Landscape(streetHost);
