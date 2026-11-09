@@ -9,7 +9,8 @@ import type { Ability, Link, Rich, WorkEntry } from './types';
 // ------------------------------------------------------------------ hero
 export const hero = {
   title: "Hi, I'm Nathan.",
-  lede: 'One of the last to debug till late at night. Now an AI enthusiast.' as Rich,
+  /** the line under the greeting; leave it empty for none */
+  lede: '' as Rich,
   actions: [
     { label: 'Email me', href: 'mailto:hi@nathanvj.com' },
     { label: 'See my work', href: '#work' },
