@@ -9,7 +9,7 @@ import type { Ability, AskQuestion, Link, Rich, WorkEntry } from './types';
 // ------------------------------------------------------------------ hero
 export const hero = {
   title: "Hi, I'm Nathan.",
-  lede: "I build products from the database to the last pixel, and these days most of them run on AI. Right now I'm CTO at [Advey](https://advey.ai), where we build software for financial advisors." as Rich,
+  lede: 'CTO at [Advey](https://advey.ai).' as Rich,
   actions: [
     { label: 'Email me', href: 'mailto:hi@nathanvj.com' },
     { label: 'See my work', href: '#work' },

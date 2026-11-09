@@ -11,7 +11,7 @@ export const site = {
   title: 'Nathan van Jole',
   /** the description search engines and link previews show */
   description:
-    'CTO at Advey. I build AI that holds up in financial advice, from the database to the last pixel.',
+    'Nathan van Jole, CTO at Advey.',
   email: 'hi@nathanvj.com',
   location: 'The Netherlands',
   /** used for the twitter:creator tag */

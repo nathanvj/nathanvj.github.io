@@ -92,7 +92,7 @@ export const terminal = {
   prompt: 'ruby@nathanvj ~ $',
   welcome: ['Welcome to nathanvj.com, terminal edition.', 'Type help to see what you can do.'],
   about: [
-    'Nathan van Jole. I build products from the database to the last pixel.',
+    'Nathan van Jole.',
     'Writing code since I was twelve, professionally since 2020.',
     'CTO at Advey. Also lead developer at GetMore Systems.',
   ],
