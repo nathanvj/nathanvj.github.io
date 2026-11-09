@@ -75,5 +75,7 @@ const { box, letter, slot } = POSTBOX;
   @media (max-width: 760px) {
     .contact { grid-template-columns: minmax(0, 1fr); }
     .postbox { justify-self: end; margin: -8px 0 28px; }
+    /* the field sits on the right here, so the hint lines up with its right edge, on one line */
+    .hint { left: auto; text-align: right; white-space: nowrap; }
   }
 </style>
