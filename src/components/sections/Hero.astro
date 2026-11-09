@@ -44,7 +44,8 @@ import RubyRun from '../ui/RubyRun.astro';
     font-size: clamp(54px, 10vw, 124px);
     font-weight: 700;
     line-height: 0.95;
-    margin-bottom: 40px;
+    /* room under the greeting, on the pixel grid: 60px, 40px on phones */
+    margin-bottom: calc(var(--px) * 20);
     text-shadow: 0 calc(var(--px) * 2) 0 var(--headline-shadow);
   }
   .actions-row { position: relative; }
