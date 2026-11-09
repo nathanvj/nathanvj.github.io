@@ -4,7 +4,7 @@
  * Markup in `Rich` fields: [link text](https://url) and **bold**.
  * `rubySays` is what Ruby might say when she lands on that part of the page.
  */
-import type { Ability, AskQuestion, Link, Rich, WorkEntry } from './types';
+import type { Ability, Link, Rich, WorkEntry } from './types';
 
 // ------------------------------------------------------------------ hero
 export const hero = {
@@ -126,11 +126,6 @@ export const work = {
 export const build = {
   title: 'What I build',
   intro: 'Give me a problem, not a tech stack. These days the problem usually involves AI.',
-  featured: {
-    icon: 'spark',
-    title: 'AI that does real work',
-    text: 'LLM features, agents and pipelines that hold up in production: retrieval over your own data, speech to structured documents, and evaluations so you know it actually works. At Advey this turns hour-long client meetings into structured reports.',
-  } satisfies Ability,
   rubySays: 'This is the fun part.',
   abilities: [
     {
@@ -144,31 +139,6 @@ export const build = {
       text: 'Performance, monitoring and the other unglamorous parts, like code the next developer can actually read.',
     },
   ] satisfies Ability[],
-  /** the "Ask me something" box: pick a question, the answer types itself out */
-  ask: {
-    title: 'Ask me something',
-    placeholder: 'Pick a question.',
-    questions: [
-      {
-        id: 'advey',
-        question: 'What are you building at Advey?',
-        answer:
-          'Advey records and transcribes client meetings for financial advisors, then turns them into structured reports. As CTO I own the architecture and the AI pipeline, from speech to the final report.',
-      },
-      {
-        id: 'reliable',
-        question: 'How do you make AI reliable?',
-        answer:
-          "Treat the model like a dependency you don't fully trust. Give it a narrow job and the right context, check what it returns against real rules, and measure it on real examples before and after every change. Most of the work is the boring part around the model.",
-      },
-      {
-        id: 'projects',
-        question: 'Are you taking on projects?',
-        answer:
-          "Not right now: Advey has all of me. But if you're building something in AI or finance and want to compare notes, email me at hi@nathanvj.com. I usually reply within a day.",
-      },
-    ] satisfies AskQuestion[],
-  },
 };
 
 // ------------------------------------------------------------------ contact

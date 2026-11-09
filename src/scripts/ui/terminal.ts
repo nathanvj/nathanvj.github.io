@@ -88,7 +88,7 @@ export function mountTerminal({ world, game, party, play }: Deps): { toggle: () 
         break;
       case 'build':
       case 'stack':
-        [build.featured, ...build.abilities].forEach((a) => print('  ', ['ok', a.title]));
+        build.abilities.forEach((a) => print('  ', ['ok', a.title]));
         break;
       case 'contact':
         print('Email ', ['a', site.email, `mailto:${site.email}`], '. I usually reply within a day.');

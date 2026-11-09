@@ -50,12 +50,6 @@ export interface Ability {
   text: Rich;
 }
 
-export interface AskQuestion {
-  id: string;
-  question: string;
-  answer: string;
-}
-
 export interface Achievement {
   id: string;
   name: string;

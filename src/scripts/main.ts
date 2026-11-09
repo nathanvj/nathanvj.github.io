@@ -12,7 +12,7 @@ import { Landscape } from './scene/landscape';
 import { mountRun } from './run/play';
 import { reducedMotion } from './scene/env';
 import { mountProps } from './scene/props';
-import { greetOnce, makeParty, mountAsk, mountWaterLife, mountContact, mountHideToggle, mountLogos, mountPortraits } from './ui/extras';
+import { greetOnce, makeParty, mountWaterLife, mountContact, mountHideToggle, mountLogos, mountPortraits } from './ui/extras';
 import { mountTerminal } from './ui/terminal';
 import { mountTheme } from './ui/theme';
 import { toast } from './ui/toast';
@@ -21,7 +21,6 @@ mountTheme();
 mountLogos();
 mountPortraits();
 mountProps();
-mountAsk();
 
 const streetHost = document.querySelector<HTMLElement>('[data-ground="street"]')!;
 const land = new Landscape(streetHost);

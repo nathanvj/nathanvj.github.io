@@ -1,9 +1,9 @@
 /**
- * The smaller interactive bits: the blinking avatar, "Ask me something",
+ * The smaller interactive bits: the blinking avatar,
  * the contact form (copying the address, posting the letter), the duck and the boat, the footer heart and
  * party mode.
  */
-import { build, contact } from '../../content/home';
+import { contact } from '../../content/home';
 import { game as gameConfig } from '../../content/ruby';
 import { site } from '../../content/site';
 import { fill, pick } from '../../lib/rich';
@@ -55,27 +55,6 @@ export function mountLogos(): void {
   };
   size();
   addEventListener('resize', size);
-}
-
-/** "Ask me something": pick a question, the answer streams in like a model would type it */
-export function mountAsk(): void {
-  const out = document.querySelector<HTMLElement>('[data-ask-out]');
-  if (!out) return;
-  let timer = 0;
-  document.querySelectorAll<HTMLButtonElement>('[data-ask]').forEach((chip) => chip.addEventListener('click', () => {
-    document.querySelectorAll('[data-ask]').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
-    const text = build.ask.questions.find((q) => q.id === chip.dataset.ask)?.answer ?? '';
-    clearInterval(timer);
-    if (reducedMotion) { out.textContent = text; return; }
-    out.textContent = '';
-    out.classList.add('typing');
-    let i = 0;
-    timer = window.setInterval(() => {
-      i = Math.min(text.length, i + 2 + Math.floor(Math.random() * 3));
-      out.textContent = text.slice(0, i);
-      if (i >= text.length) { clearInterval(timer); out.classList.remove('typing'); }
-    }, 28);
-  }));
 }
 
 /** the contact form: copy the address, or post the letter on the grass into the mailbox */

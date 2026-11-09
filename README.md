@@ -87,7 +87,6 @@ A few strings have `{placeholders}`, like `'Bone {n} of {total}'`; keep those wo
   job. Hats: `cap`, `hardhat`, `crown`, `party`.
 - **What Ruby says somewhere**: `rubySays` on a section or job. Her own lines are in `ruby.ts`;
   a line can be a list, then she picks one at random.
-- **"Ask me something"**: `build.ask.questions` in `home.ts`.
 - **Achievements**: `game.achievements` in `ruby.ts`. The game awards them by `id`
   (see `scripts/game/game.ts`); add a `secret` text to hide one until it's found.
 - **Hidden bones**: each id in `game.bones` needs a `<Bone id="…" />` in a component,
