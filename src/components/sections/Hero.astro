@@ -46,11 +46,11 @@ import RubyRun from '../ui/RubyRun.astro';
     font-size: clamp(54px, 10vw, 124px);
     font-weight: 700;
     line-height: 0.95;
-    /* room under the greeting, on the pixel grid: 30px, 20px on phones */
-    margin-bottom: calc(var(--px) * 10);
+    /* the line sits close under the greeting, the buttons get more air (on the pixel grid) */
+    margin-bottom: calc(var(--px) * 6);
     text-shadow: 0 calc(var(--px) * 2) 0 var(--headline-shadow);
   }
-  .lede { font-size: clamp(18px, 2.1vw, 22px); line-height: 1.5; max-width: 36em; margin-bottom: calc(var(--px) * 12); }
+  .lede { font-size: clamp(18px, 2.1vw, 22px); line-height: 1.5; max-width: 36em; margin-bottom: calc(var(--px) * 14); }
   .actions-row { position: relative; }
   .actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
   /* while Ruby Run is on, the scores take the buttons' place */
