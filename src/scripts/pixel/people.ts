@@ -1,5 +1,5 @@
 /**
- * Nathan (the header avatar) and the two of us in the boat.
+ * Nathan (the header avatar), the two of us in the boat, and Mum on her bench.
  * Cartoon proportions on purpose: round faces, dot eyes, rosy cheeks.
  */
 import type { PixelBuffer } from './buffer';
@@ -81,5 +81,75 @@ export function drawBoat(b: PixelBuffer): void {
   // a lantern on a pole at the back
   R(31, 7, 1, 9, C.ink);
   R(30, 4, 3, 3, C.ink); P(31, 5, C.spark);
+  b.outline();
+}
+
+export interface MumPose {
+  /** the hook hand: down (0) or pulling a loop through (1) */
+  hook?: 0 | 1;
+  /** eyes closed: a blink, or smiling at you */
+  closed?: boolean;
+}
+
+/** the size of Mum's sprite, bench included */
+export const MUM = { w: 30, h: 26 };
+
+/**
+ * Mum on a park bench, 30×26, crocheting: dark brown hair in a ponytail, the denim
+ * jacket and a cream scarf over a grey dress, white
+ * trainers, a granny square in her hands and a ball of pink yarn beside her on the bench.
+ */
+export function drawMum(b: PixelBuffer, p: MumPose = {}): void {
+  b.clear();
+  const E = (cx: number, cy: number, rx: number, ry: number, col: number | ((x: number, y: number, nx: number) => number)) =>
+    b.ell(cx + 1, cy + 1, rx, ry, typeof col === 'number' ? col : (x, y, nx) => col(x, y, nx));
+  const R = (x: number, y: number, w: number, h: number, col: number) => b.rect(x + 1, y + 1, w, h, col);
+  const P = (x: number, y: number, col: number) => b.set(x + 1, y + 1, col);
+
+  // the bench: two slats on the back, the seat, iron legs
+  R(1, 9, 1, 8, C.woodDeep); R(26, 9, 1, 8, C.woodDeep);
+  R(0, 10, 28, 1, C.woodLight); R(0, 11, 28, 1, C.wood);
+  R(0, 13, 28, 1, C.woodLight); R(0, 14, 28, 1, C.wood);
+  R(0, 16, 28, 1, C.woodLight); R(0, 17, 28, 1, C.woodDeep);
+  for (const x of [2, 25]) { R(x, 18, 1, 5, C.collar); R(x - 1, 23, 3, 1, C.collar); }
+
+  // her ponytail and hair behind, the jacket, the scarf
+  E(14.5, 8.6, 1.4, 2.7, C.mumHairDeep); P(14, 11, C.mumHairDeep);
+  E(10, 5.2, 4.2, 3.9, C.mumHair);
+  E(10, 13.4, 4.8, 3.7, (_x, _y, nx) => (nx > 0.45 ? C.denimDeep : C.denim));
+  P(7, 10, C.denimLight); P(13, 10, C.denimLight);
+  R(8, 10, 5, 1, C.scarf); R(8, 11, 2, 3, C.scarf); P(8, 13, C.scarfDeep); P(9, 14, C.scarfDeep);
+
+  // her face
+  E(10, 6, 3.6, 3.6, (_x, _y, nx) => (nx > 0.75 ? C.skinDeep : C.skin));
+  // dark hair swept to one side, a loose strand by her cheek
+  R(7, 2, 7, 1, C.mumHair); R(7, 3, 3, 1, C.mumHair); R(12, 3, 2, 1, C.mumHairDeep);
+  P(6, 4, C.mumHair); P(6, 5, C.mumHair); P(6, 6, C.mumHairLight); P(14, 4, C.mumHairDeep); P(14, 5, C.mumHairDeep);
+  P(8, 2, C.mumHairLight); P(9, 3, C.mumHairLight); P(12, 2, C.mumHairLight);
+  if (p.closed) { P(8, 6, C.ink); P(11, 6, C.ink); }
+  else { R(8, 5, 1, 2, C.ink); R(11, 5, 1, 2, C.ink); }
+  P(7, 7, C.blush); P(12, 7, C.blush);
+  P(8, 7, C.lip); R(9, 8, 2, 1, C.lip); P(11, 7, C.lip);
+
+  // her dress over her knees, knees and feet together, white trainers
+  R(5, 16, 11, 2, C.dress); R(12, 16, 4, 2, C.dressDeep);
+  R(6, 18, 9, 1, C.dress); R(12, 18, 3, 1, C.dressDeep);
+  R(7, 19, 7, 1, C.dressDeep);
+  R(8, 20, 2, 2, C.skin); P(9, 21, C.skinDeep); R(11, 20, 2, 2, C.skin); P(12, 21, C.skinDeep);
+  R(7, 22, 3, 1, C.white); R(11, 22, 3, 1, C.white);
+
+  // a granny square in progress in her hands, the hook going in and out
+  const up = p.hook === 1 ? 1 : 0;
+  R(8, 14, 4, 2, C.yarn); R(9, 14, 2, 2, C.yellow); P(9, 15, C.ok);
+  P(8, 16, C.yarn); P(9, 16, C.scarf); P(10, 16, C.yarn); P(11, 16, C.scarf);
+  P(7, 15, C.skin);
+  P(12, 15 - up, C.skin);
+  P(13, 14 - up, C.steelDeep); P(14, 13 - up, C.steelDeep);
+
+  // the ball of yarn on the bench, its thread running to her hands
+  E(20, 13.6, 2.3, 2.3, (_x, _y, nx) => (nx > 0.3 ? C.yarnDeep : C.yarn));
+  P(19, 13, C.yarnDeep); P(21, 12, C.yarn); P(20, 15, C.yarn);
+  P(17, 14, C.yarnDeep); P(16, 15, C.yarnDeep); P(15, 15, C.yarnDeep); P(14, 15, C.yarnDeep);
+
   b.outline();
 }

@@ -80,6 +80,20 @@ const COLORS = {
   advey: '#07274d',
   adveyOrange: '#e8650a',
   ok: '#2fb36a',
+
+  // Nathan's mum on her bench: dark brown hair, the denim jacket, a cream scarf, a grey dress, pink yarn
+  mumHair: '#5e4334',
+  mumHairDeep: '#3f2c22',
+  mumHairLight: '#86644f',
+  dress: '#646b7d',
+  dressDeep: '#4b5162',
+  denim: '#5f86b8',
+  denimDeep: '#42648f',
+  denimLight: '#8db0d8',
+  scarf: '#f3ede1',
+  scarfDeep: '#d5ccba',
+  yarn: '#ff7aa0',
+  yarnDeep: '#d94a72',
 } as const;
 
 export type Color = keyof typeof COLORS;

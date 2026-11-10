@@ -3,9 +3,10 @@
  *
  * This paints the sky, the bike path Ruby walks on, and the ditch in front of
  * it with a wobbling reflection; what stands on the land (fields, windmills,
- * cows, willows) comes from polder.ts. Kwak the duck and the boat with the two
- * of us float on a second canvas above Ruby: they are in the water, between
- * her path and you.
+ * cows, willows) comes from polder.ts. Mum sits on her bench on the verge, by
+ * the first willow, crocheting. Kwak the duck and the boat with the two of us
+ * float on a second canvas above Ruby: they are in the water, between her path
+ * and you.
  *
  * At rest it is a still landscape, animated at 12 fps in the page's day or
  * night. During Ruby Run the game drives it instead (startRun, drawRun): the
@@ -19,7 +20,7 @@
 import { emit, on } from '../events';
 import { PixelBuffer } from '../pixel/buffer';
 import { drawOutlinedGlyph } from '../pixel/glyphs';
-import { drawBoat } from '../pixel/people';
+import { drawBoat, drawMum, MUM, type MumPose } from '../pixel/people';
 import { drawDuck } from '../pixel/things';
 import { dither, isNight, PALETTES, px, pxSize, rect, reducedMotion, rng, type ScenePalette } from './env';
 import { blend, Look, tone, type View } from './look';
@@ -29,6 +30,8 @@ const GROUND = 96;          // native rows reserved at the bottom of the hero (m
 const WATER = 22, QUAY = 3, STREET = 7;
 const BOAT_SPEED = 8;       // native px per second
 const BOAT_GAP = 160;       // native px of empty water between two passes
+/** where Mum's bench stands on the verge (native px), just past the first willow */
+const MUM_X = 44;
 /** the clouds hardly move while the land scrolls */
 const CLOUD_PARALLAX = 0.06;
 
@@ -61,8 +64,9 @@ export class Landscape {
   /** areas with text in them (native px), kept free of stars and the moon */
   private keepOut: Box[] = [];
   private duckSprite?: HTMLCanvasElement; private duckBox: Box | null = null; private squeak = 0;
-  private boatSprite?: HTMLCanvasElement; private boatBox: Box | null = null; private boatOffset = 60;
+  private boatSprite?: HTMLCanvasElement; private boatBox: Box | null = null; private boatOffset = 130;
   private runBoat: { x0: number; t0: number } | null = null;
+  private mumSprites = new Map<string, HTMLCanvasElement>(); private mumBox: Box | null = null; private mumSmile = 0;
 
   constructor(host: HTMLElement) {
     this.host = host;
@@ -156,6 +160,7 @@ export class Landscape {
     const view: View = { camX, t: this.t, n, W, H, street, running: this.running };
     c.clearRect(0, 0, W, H);
     this.polder.back(c, view);
+    this.drawMum(c, X, n);
     rect(c, 0, street, W, STREET, tone('street', n));
     if (this.cobbles) blend(c, this.cobbles, -(((X % 4) + 4) % 4), street, n);
     rect(c, 0, street + STREET, W, 1, tone('quay', n));
@@ -267,6 +272,32 @@ export class Landscape {
     this.paintBoat(c, Math.round(bx), wy - 1 + (Math.sin(this.t * 1.8) > 0 ? 0 : 1), n);
   }
 
+  // ---------------------------------------------------------------- Mum, on her bench
+  /** Mum crocheting on the verge, with a lamp post beside the bench that comes on at night */
+  private drawMum(c: CanvasRenderingContext2D, X: number, n: number): void {
+    const x = MUM_X - X, foot = this.street - 2, y = foot - (MUM.h - 2), t = this.t;
+    if (x < -MUM.w - 8 || x > this.W) { this.mumBox = null; return; }
+    // the lamp post: a dark green pole and a lantern, lit at night with a warm glow around it
+    const lx = x + MUM.w + 2, top = foot - 27;
+    rect(c, lx, top + 4, 1, foot - top - 3, tone('door', n));
+    rect(c, lx - 1, top, 3, 1, tone('door', n)); rect(c, lx - 1, top + 3, 3, 1, tone('door', n));
+    rect(c, lx - 1, top + 1, 3, 2, n > 0.5 ? PALETTES.night.lit[0] : PALETTES.day.glassHi);
+    if (n > 0) {
+      c.globalAlpha = n;
+      for (let dx = -7; dx <= 7; dx++) for (let dy = -6; dy <= 7; dy++) {
+        if (dither(lx + dx, top + 2 + dy, 0.32 - Math.hypot(dx, dy) / 22)) px(c, lx + dx, top + 2 + dy, PALETTES.night.glow);
+      }
+      c.globalAlpha = 1;
+    }
+    // she pulls a loop through now and then, blinks, and smiles when you click her
+    const pose: MumPose = { hook: Math.floor(t * 2.5) % 3 === 0 ? 1 : 0, closed: t < this.mumSmile || t % 4.7 < 0.15 };
+    const key = `${pose.hook}${pose.closed ? 1 : 0}`;
+    let sprite = this.mumSprites.get(key);
+    if (!sprite) { const b = new PixelBuffer(MUM.w, MUM.h); drawMum(b, pose); sprite = b.canvas(); this.mumSprites.set(key, sprite); }
+    c.drawImage(sprite, x, y);
+    this.mumBox = [x, y, MUM.w, MUM.h];
+  }
+
   // ---------------------------------------------------------------- Kwak, the duck
   private drawDuck(c: CanvasRenderingContext2D, wy: number, away: number, n: number): void {
     if (!this.duckSprite) { const b = new PixelBuffer(12, 9); drawDuck(b); this.duckSprite = b.canvas(); }
@@ -341,7 +372,9 @@ export class Landscape {
     const nx = (e.clientX - r.left) / S, ny = (e.clientY - r.top) / S;
     const near = (box: Box | null, pad: number, above: number) =>
       box && nx >= box[0] - pad && nx <= box[0] + box[2] + pad && ny >= box[1] - above && ny <= box[1] + box[3] + pad;
-    if (near(this.boatBox, 4, 16)) {
+    // Mum sits behind the water: the boat wins where it covers her, she wins over the space around the boat
+    const onMum = near(this.mumBox, 0, 0) && !near(this.boatBox, 0, 0);
+    if (!onMum && near(this.boatBox, 4, 16)) {
       const [x, y] = this.boatBox!;
       emit('water:boat', { x: r.left + scrollX + (x + 17) * S, y: r.top + scrollY + (y - 2) * S });
     } else if (near(this.duckBox, 3, 3)) {
@@ -349,6 +382,11 @@ export class Landscape {
       this.squeak = 0.5;
       this.frame();
       emit('water:duck', { x: r.left + scrollX + (x + 6) * S, y: r.top + scrollY + (y - 2) * S });
+    } else if (onMum) {
+      const [x, y] = this.mumBox!;
+      this.mumSmile = this.t + 2.2;
+      this.frame();
+      emit('land:mum', { x: r.left + scrollX + (x + 11) * S, y: r.top + scrollY + y * S, seat: r.left + scrollX + (x + 38) * S });
     }
   }
 }

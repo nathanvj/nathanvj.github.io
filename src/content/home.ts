@@ -17,6 +17,8 @@ export const hero = {
   ] satisfies Link[],
   rubySays: "That's my human.",
   streetSays: 'Smell that polder air.',
+  /** Mum on her bench by the willow, crocheting: what she says when you click her */
+  mum: { says: 'Just one more row.' },
 };
 
 // ------------------------------------------------------------------ about

@@ -18,8 +18,8 @@
 <br>
 
 Ruby walks over the page, fetches the ball, begs for treats, and has a small game with
-achievements and hidden bones. There is a ditch with a duck, a boat for date night, a
-terminal for the curious, and **Ruby Run**: an endless runner played right in the hero,
+achievements and hidden bones. There is a ditch with a duck, a boat for date night, my
+mum crocheting on a bench, a terminal for the curious, and **Ruby Run**: an endless runner played right in the hero,
 where the polder starts scrolling and Ruby runs down the bike path.
 
 Built with [Astro](https://astro.build): one static HTML page, a little CSS, and one
@@ -86,6 +86,9 @@ A few strings have `{placeholders}`, like `'Bone {n} of {total}'`; keep those wo
 - **The Advey card** in What I build: the text and the four steps are `build.now` in
   `home.ts`. The animation is `scripts/pixel/advey.ts`: a 12-second loop, three seconds
   per step.
+- **Mum on her bench**: what she says is `hero.mum` in `home.ts`, what Ruby says when she
+  sits with her is `mum` in `ruby.ts`. Where the bench stands is `MUM_X` in
+  `scripts/scene/landscape.ts`.
 - **Give Ruby a hat on a card**: add `hat: { name: 'crown', says: 'Boss mode.' }` to that
   job. Hats: `cap`, `hardhat`, `crown`, `party`.
 - **What Ruby says somewhere**: `rubySays` on a section or job. Her own lines are in `ruby.ts`;
@@ -137,7 +140,7 @@ scripts/main.ts  boots everything on the page
 ```
 
 The engines never call the game or the UI. They announce what happened on a small
-event bus (`scripts/events.ts`: `ruby`, `water:duck`, `water:boat`, `theme`,
+event bus (`scripts/events.ts`: `ruby`, `water:duck`, `water:boat`, `land:mum`, `theme`,
 `terminal:open`, `run:over`), and whoever cares listens. That's how the game awards
 achievements without Ruby knowing a game exists.
 
@@ -152,7 +155,9 @@ achievements without Ruby knowing a game exists.
 - **`scene/`**: the hero landscape. `landscape.ts` paints the sky, the red bike path Ruby
   walks on and the ditch in front of it, and animates clouds, stars, water, Kwak the duck
   and the boat at 12 fps. The duck and the boat are on a second canvas above Ruby, because
-  they float in the water between her path and you. `polder.ts` is everything on the land,
+  they float in the water between her path and you. Mum sits on her bench on the verge, by
+  the first willow, with a lamp post that comes on at night; her sprite is `drawMum` in
+  `pixel/people.ts`. `polder.ts` is everything on the land,
   in layers that scroll at different speeds: a hazy tree line, windmills with turning
   sails, farms and a church on the horizon, bulb fields, meadows with cows that wander and
   graze, a heron, the verge with pollard willows, geese flying over, reeds along the water.
@@ -249,6 +254,7 @@ Type: **Pixelify Sans** for display, **Figtree** for everything else, **VT323** 
 
 - The Konami code, or `party` in the terminal.
 - Click the duck.
+- Click Mum on her bench: Ruby comes over and sits with her.
 - Click the heart in the footer.
 - In the terminal: `ls -a`, then `cat .bone`.
 

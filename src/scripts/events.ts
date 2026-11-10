@@ -12,6 +12,8 @@ export interface Events {
   'water:duck': { x: number; y: number };
   /** someone clicked the boat with the two of us (page coordinates) */
   'water:boat': { x: number; y: number };
+  /** someone clicked Mum on her bench: above her head, and the spot beside her where Ruby sits (page coordinates) */
+  'land:mum': { x: number; y: number; seat: number };
   /** day or night changed */
   theme: { theme: 'day' | 'night' };
   'terminal:open': Record<string, never>;

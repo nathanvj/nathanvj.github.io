@@ -36,6 +36,8 @@ export const ruby = {
     duck: 'Woof! Woof! A duck!',
     boatPasses: ['Hi, you two!', 'Woof! My humans!', 'Bring me a snack!'],
     boatClicked: 'Awww. My humans.',
+    /** when she sits down with Mum on the bench */
+    mum: ['Time for cuddles!', 'Maybe Mum has a snack for me.'],
     afterRun: ['Phew.', 'That was fun!', 'Again? Again!'],
   } satisfies Record<string, Line>,
 };

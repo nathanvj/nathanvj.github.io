@@ -1,9 +1,9 @@
 /**
  * The smaller interactive bits: the blinking avatar,
- * the contact form (copying the address, posting the letter), the duck and the boat, the footer heart and
- * party mode.
+ * the contact form (copying the address, posting the letter), the duck, the boat and Mum on her bench,
+ * the footer heart and party mode.
  */
-import { contact } from '../../content/home';
+import { contact, hero } from '../../content/home';
 import { game as gameConfig } from '../../content/ruby';
 import { site } from '../../content/site';
 import { fill, pick } from '../../lib/rich';
@@ -118,12 +118,14 @@ export function mountHideToggle(world: PageWorld): void {
   sync();
 }
 
-/** Kwak the duck, the boat with the two of us, Ruby greeting it, and the footer heart */
+/** Kwak the duck, the boat with the two of us, Mum on her bench, Ruby greeting them, and the footer heart */
 export function mountWaterLife(world: PageWorld, land: Landscape): void {
   const ruby = world.ruby;
   const bubble = new Bubble();
   let at: { x: number; y: number } | null = null;
   const onStreet = () => !world.hidden && ruby.platform?.el.dataset.ground === 'street' && !ruby.task;
+  /** Ruby on her way to sit with Mum: where, and until when she keeps trying */
+  let visit: { x: number; until: number } | null = null;
 
   on('water:duck', (p) => {
     at = p;
@@ -138,11 +140,39 @@ export function mountWaterLife(world: PageWorld, land: Landscape): void {
     bubble.show(site.footer.heart.bubble, 2);
     if (onStreet()) setTimeout(() => ruby.say('boatClicked', 2), 500);
   });
+  // click Mum: she says something, and Ruby comes over (jumping down to the path if she has to) to sit with her
+  on('land:mum', (p) => {
+    at = p;
+    bubble.show(hero.mum.says, 2.2);
+    if (world.hidden || ruby.task || ruby.driving || ruby.mode === 'held') return;
+    if (ruby.mode === 'sleep') ruby.wake();
+    if (onStreet()) ruby.walkTo(p.seat, 'run');
+    else {
+      const street = world.find(document.querySelector<HTMLElement>('[data-ground="street"]')!);
+      if (street && ruby.platform) ruby.jumpTo({ p: street, x: p.seat });
+    }
+    visit = { x: p.seat, until: performance.now() + 9000 };   // time for a sniff on the way
+  });
 
-  // when the boat drifts by, Ruby runs along the quay to say hi, once per pass
+  // when the boat drifts by, Ruby runs along the quay to say hi, once per pass (unless she's on her way to Mum)
   let greeted = -1;
   onTick(() => {
     if (at) bubble.place(at.x, at.y - 4);
+    if (visit) {
+      if (performance.now() > visit.until) visit = null;
+      else if (onStreet() && (ruby.mode === 'idle' || ruby.mode === 'sit')) {
+        if (Math.abs(ruby.x - visit.x) > 40) ruby.walkTo(visit.x, 'run');
+        else {
+          ruby.facing = -1;
+          ruby.setMode('sit', 5);
+          ruby.eyes('happy', 2);
+          ruby.say('mum', 2.4);
+          visit = null;
+          greeted = land.boatPass;   // she stays put, even if the boat is passing
+        }
+      }
+      return;
+    }
     const boat = land.boatOnPage();
     if (!boat || land.boatPass === greeted || !onStreet() || ruby.driving || ruby.mode === 'held') return;
     if (boat.x < scrollX + 60 || boat.x > scrollX + innerWidth - 60) return;
